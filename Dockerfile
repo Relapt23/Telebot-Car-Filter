@@ -1,4 +1,9 @@
-FROM ubuntu:latest
-LABEL authors="relapt"
+FROM python:3.9-slim
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .

@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-from pyrogram import Client, filters
 
 load_dotenv()
 
@@ -15,15 +14,3 @@ DB_CONFIG = {
     "password": os.getenv("DB_PASSWORD"),
     "database": os.getenv("DB_NAME"),
 }
-
-app = Client("my_session", api_id=API_ID, api_hash=API_HASH)
-
-with app:
-    print("Успешный вход в Telegram!")
-
-
-@app.on_message(filters.chat("auto_zakazz25"))
-async def handle_channel_messages(client, message):
-    print(f"Новое сообщение в канале: {message.text}")
-
-app.run()

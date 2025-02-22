@@ -1,11 +1,21 @@
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-import os
+from database_config.config import DB_CONFIG
+from database_config.models import Base, InfoCars
+from sqlalchemy import select
 
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_USER = os.getenv("DB_USER", "wallet_user")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "wallet_pass")
-DB_NAME = os.getenv("DB_NAME", "wallet_db")
-
-engine = create_async_engine(f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}", echo=True)
+engine = create_async_engine(f"postgresql+asyncpg://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}", echo=True)
 sess = async_sessionmaker(engine)
+
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+async def save_message(car: str, text: str, tg_url: str, price: str):
+    async with sess() as session:
+        response = await session.execute(select(InfoCars).where(tg_url==InfoCars.tg_url))
+        res = response.scalars().all()
+        if not res:
+            right_message = InfoCars(car=car, text=text, tg_url=tg_url, price=price)
+            session.add(right_message)
+            await session.commit()
