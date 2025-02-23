@@ -4,4 +4,4 @@
 database_config/__init__.py
 __pycache__
 .idea
-
+my_session.session

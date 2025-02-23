@@ -2,3 +2,4 @@ sqlalchemy
 asyncpg
 pyrogram
 python-dotenv
+
