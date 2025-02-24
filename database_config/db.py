@@ -11,11 +11,12 @@ async def init_db():
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def save_message(car: str, text: str, tg_url: str, price: str):
+async def save_message(car: str, text: str, tg_url: str, price: str, year: str, engine_capacity: str, rating: str):
     async with sess() as session:
         response = await session.execute(select(InfoCars).where(tg_url==InfoCars.tg_url))
         res = response.scalars().all()
         if not res:
-            right_message = InfoCars(car=car, text=text, tg_url=tg_url, price=price)
+            right_message = InfoCars(car=car, text=text, tg_url=tg_url,price=price,
+                                     year=year, engine_capacity=engine_capacity, rating=rating)
             session.add(right_message)
             await session.commit()
