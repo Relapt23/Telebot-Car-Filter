@@ -13,5 +13,8 @@ class InfoCars(Base):
     car: Mapped[str]
     text: Mapped[str]
     price: Mapped[str]
+    year: Mapped[str]
+    engine_capacity: Mapped[str]
+    rating: Mapped[str]
     tg_url: Mapped[str]
     date_create: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
